@@ -5,10 +5,6 @@ This repository contains the complete analytical pipeline, curated numerical dat
 ## Hypothesis & Rationale
 ZIKV and DENV are related mosquito-borne flaviviruses that share extensive sequence homology, geographical distribution, and clinical features. We hypothesized that the common pathological features of these viral infections—such as immune dysregulation and amplified viremia—are driven by a **Core Transcriptomic Signature** that is post-transcriptionally governed by a **convergent network of hub miRNAs**. 
 
-<p align="center">
-  <img src="assets/Combined_Summary_Figure.png" alt="Summary of Analytical Pipeline">
-</p>
-
 ---
 
 ## Complete 13-Step Analytical Workflow
@@ -20,6 +16,10 @@ ZIKV and DENV are related mosquito-borne flaviviruses that share extensive seque
   * **ZIKV Huh7 (GSE78711):** 1,169 significant DEGs (397 up, 772 down).
   * **DENV Blood (GSE279208):** 2,009 significant DEGs (1,300 up, 709 down).
 
+<p align="center">
+  <img src="assets/Bulk_Volcano_DENV.png" alt="DENV Volcano Plot" width="600">
+</p>
+
 ### Step 2: Functional Enrichment (GO & KEGG)
 * **Analysis:** Pathway and ontological enrichment using `clusterProfiler` on the identified DEGs.
 * **Results:** Major convergence on Type I Interferon Signaling, Cytokine-Cytokine Receptor Interaction, and Apoptotic pathways across both viral infections.
@@ -28,9 +28,25 @@ ZIKV and DENV are related mosquito-borne flaviviruses that share extensive seque
 * **Analysis:** Dimensionality reduction (UMAP), clustering, and cell state annotation on scRNA-seq peripheral blood mononuclear cells (PBMCs) using `scanpy`.
 * **Results:** Segregated the cellular landscape into 8 distinct functional clusters, uniquely characterizing the "High-Infection" cellular compartment vs. uninfected "Bystanders."
 
+<p align="center">
+  <img src="assets/UMAP_infection_state.png" alt="Infection State UMAP" width="600">
+</p>
+
+### Single-Cell Marker Validation
+* **Analysis:** To ensure robust cellular characterization, we visualized the expression of classical viral response and immune markers across the UMAP space.
+* **Results:** Markers strongly localized to specific functional compartments, confirming our clustering logic and cellular states.
+
+<p align="center">
+  <img src="assets/Validation_Feature_Plots.png" alt="Validation Feature Plots" width="600">
+</p>
+
 ### Step 4: Pseudotime Trajectory Inference
 * **Analysis:** Monocle-style trajectory mapping to model the temporal progression from healthy states through early and late infection phases.
 * **Results:** Identified that ZIKV and DENV infected cells traverse a shared early trajectory (a convergent initial response) before branching into virus-specific late trajectories.
+
+<p align="center">
+  <img src="assets/Pseudotime_DynamicGene_Heatmap.png" alt="Pseudotime Heatmap" width="600">
+</p>
 
 ### Step 5: Cell-Cell Communication Modeling (CellChat)
 * **Analysis:** Paracrine signaling inference between annotated cell states by scoring established ligand-receptor pairs.
@@ -39,6 +55,10 @@ ZIKV and DENV are related mosquito-borne flaviviruses that share extensive seque
 ### Step 6: Cross-Modal Signature Derivation
 * **Analysis:** Strict intersection of the 3 bulk RNA-seq DEG lists with the pseudobulked single-cell RNA-seq DEGs to extract a universally conserved molecular response.
 * **Results:** Derived a **95-Gene Core Consensus Signature** (detailed in the table below) that serves as the molecular footprint of dual-flaviviral infection.
+
+<p align="center">
+  <img src="assets/CrossModal_Signature.png" alt="CrossModal Signature Venn" width="600">
+</p>
 
 ### Step 7 & 8: miRNA Target Network Construction
 * **Analysis:** Interrogated multiple predictive databases (TargetScan, miRDB, miRNet) against the 95-gene core signature, enforcing a minimum two-database consensus rule for high-confidence predictions.
@@ -63,6 +83,10 @@ ZIKV and DENV are related mosquito-borne flaviviruses that share extensive seque
 ### Step 13: miRNA Virtual Co-profiling (In Silico Validation)
 * **Analysis:** Partitioning single-cell populations into high vs. low expression groups based on the aggregated expression of the hub miRNA target modules (a proxy for active miRNA suppression).
 * **Results:** High expression of target modules directly tracked with specific viral states and functional trajectories, independently confirming the regulatory impact of the predicted miRNA hubs at single-cell resolution.
+
+<p align="center">
+  <img src="assets/Virtual_Coprofiling_Violin.png" alt="Virtual Co-profiling Violin" width="600">
+</p>
 
 ---
 
