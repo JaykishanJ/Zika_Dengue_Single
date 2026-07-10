@@ -1,6 +1,15 @@
 import scanpy as sc
 import pandas as pd
 import matplotlib.pyplot as plt
+
+import sys
+from pathlib import Path
+if str(Path("E:/Zika_Enrichment/Publication_Pipeline")) not in sys.path:
+    sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
+import pub_style
+pub_style.apply_style()
+FIG_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/final_publication_figures")
+
 from pathlib import Path
 import numpy as np
 import mygene
@@ -43,7 +52,7 @@ def main():
                legend_loc='on data', frameon=False, size=20, alpha=0.8, title="UMAP (Unannotated Clusters)")
     add_umap_arrows(ax)
     plt.tight_layout()
-    plt.savefig(OUT_DIR / "UMAP_Unannotated_Clusters.tiff", dpi=300, bbox_inches='tight', format='tiff')
+    pub_style.save_pub_fig(plt.gcf(), OUT_DIR / "UMAP_Unannotated_Clusters.tiff", dpi=300, bbox_inches='tight', format='tiff')
     plt.close()
 
     if 'infection_state' in adata.obs:
@@ -54,7 +63,7 @@ def main():
                    frameon=False, size=20, alpha=0.8, title="Annotated Cell States")
         add_umap_arrows(ax)
         plt.tight_layout()
-        plt.savefig(OUT_DIR / "UMAP_Annotated_States.tiff", dpi=300, bbox_inches='tight', format='tiff')
+        pub_style.save_pub_fig(plt.gcf(), OUT_DIR / "UMAP_Annotated_States.tiff", dpi=300, bbox_inches='tight', format='tiff')
         plt.close()
         
         pass  # Execution logging removed for final release
@@ -126,7 +135,7 @@ def main():
                 add_umap_arrows(axes[i])
                 
             plt.tight_layout()
-            plt.savefig(OUT_DIR / "Validation_Feature_Plots.tiff", dpi=300, bbox_inches='tight', format='tiff')
+            pub_style.save_pub_fig(plt.gcf(), OUT_DIR / "Validation_Feature_Plots.tiff", dpi=300, bbox_inches='tight', format='tiff')
             plt.close()
 
         pass  # Execution logging removed for final release

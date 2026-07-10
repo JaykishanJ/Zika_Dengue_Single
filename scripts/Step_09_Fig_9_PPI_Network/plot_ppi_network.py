@@ -1,3 +1,11 @@
+
+import sys
+from pathlib import Path
+if str(Path("E:/Zika_Enrichment/Publication_Pipeline")) not in sys.path:
+    sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
+import pub_style
+pub_style.apply_style()
+FIG_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/final_publication_figures")
 from PIL import Image, ImageDraw, ImageFont
 import os
 

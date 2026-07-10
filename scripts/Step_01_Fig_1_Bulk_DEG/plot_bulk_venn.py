@@ -1,6 +1,15 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import sys
+from pathlib import Path
+if str(Path("E:/Zika_Enrichment/Publication_Pipeline")) not in sys.path:
+    sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
+import pub_style
+pub_style.apply_style()
+FIG_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/final_publication_figures")
+
+
 # Nature SR Aesthetics
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
@@ -91,7 +100,7 @@ def plot_custom_venn(labels_dict, title, out_path):
     # Adjust layout to accommodate legend on the right
     plt.tight_layout()
     plt.subplots_adjust(right=0.75) 
-    plt.savefig(out_path, dpi=300, bbox_inches='tight', format='tiff')
+    pub_style.save_pub_fig(plt.gcf(), out_path, dpi=300, bbox_inches='tight', format='tiff')
     plt.close()
 
 def main():

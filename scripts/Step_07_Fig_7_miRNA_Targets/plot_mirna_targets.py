@@ -56,6 +56,15 @@ pass  # Execution logging removed for final release
 pass  # Execution logging removed for final release
 import matplotlib.pyplot as plt
 
+import sys
+from pathlib import Path
+if str(Path("E:/Zika_Enrichment/Publication_Pipeline")) not in sys.path:
+    sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
+import pub_style
+pub_style.apply_style()
+FIG_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/final_publication_figures")
+
+
 # Nature SR Aesthetics
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
@@ -90,7 +99,7 @@ ax.legend(handles=handles, loc='center left', bbox_to_anchor=(1.05, 0.5), ncol=1
 plt.title("Core DEGs Targeted by Viral miRNAs", fontsize=14)
 plt.tight_layout()
 plt.subplots_adjust(right=0.75) 
-plt.savefig(OUT_DIR / "miRNA_Target_Venn.tiff", dpi=300, format='tiff', bbox_inches='tight')
+pub_style.save_pub_fig(plt.gcf(), OUT_DIR / "miRNA_Target_Venn.tiff", dpi=300, format='tiff', bbox_inches='tight')
 plt.close()
 pass  # Execution logging removed for final release
 

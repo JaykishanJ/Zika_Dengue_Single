@@ -3,6 +3,15 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+import sys
+from pathlib import Path
+if str(Path("E:/Zika_Enrichment/Publication_Pipeline")) not in sys.path:
+    sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
+import pub_style
+pub_style.apply_style()
+FIG_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/final_publication_figures")
+
+
 # Nature SR Aesthetics
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
@@ -41,7 +50,7 @@ def plot_cell_cycle(adata):
     plt.legend(title='Cell Cycle Phase', bbox_to_anchor=(1.05, 1), loc='upper left')
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
-    plt.savefig(OUT_DIR / "Cell_Cycle_Distribution.tiff", dpi=300, format='tiff', bbox_inches='tight')
+    pub_style.save_pub_fig(plt.gcf(), OUT_DIR / "Cell_Cycle_Distribution.tiff", dpi=300, format='tiff', bbox_inches='tight')
     plt.close()
 
 def plot_gene_trends(adata, genes):
@@ -83,7 +92,7 @@ def plot_gene_trends(adata, genes):
             
         axes[-1].set_xlabel("Infection Pseudotime")
         plt.tight_layout()
-        plt.savefig(OUT_DIR / f"Pseudotime_Trends_{virus}.png", dpi=300)
+        pub_style.save_pub_fig(plt.gcf(), OUT_DIR / f"Pseudotime_Trends_{virus}.png", dpi=300)
         plt.close()
 
 def main():
@@ -145,7 +154,7 @@ def main():
             
         axes[-1].set_xlabel("Infection Pseudotime")
         plt.tight_layout()
-        plt.savefig(OUT_DIR / f"Pseudotime_Trends_{virus}.png", dpi=300)
+        pub_style.save_pub_fig(plt.gcf(), OUT_DIR / f"Pseudotime_Trends_{virus}.png", dpi=300)
         plt.close()
         
     pass  # Execution logging removed for final release

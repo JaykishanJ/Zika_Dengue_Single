@@ -1,6 +1,15 @@
 import scanpy as sc
 import pandas as pd
 import matplotlib.pyplot as plt
+
+import sys
+from pathlib import Path
+if str(Path("E:/Zika_Enrichment/Publication_Pipeline")) not in sys.path:
+    sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
+import pub_style
+pub_style.apply_style()
+FIG_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/final_publication_figures")
+
 import seaborn as sns
 from pathlib import Path
 import numpy as np
@@ -88,7 +97,7 @@ def main():
 
     plt.tight_layout()
     out_violin = OUT_DIR / "Virtual_Coprofiling_Violin.tiff"
-    plt.savefig(out_violin, dpi=300)
+    pub_style.save_pub_fig(plt.gcf(), out_violin, dpi=300)
     plt.close()
     pass  # Execution logging removed for final release
 
@@ -98,7 +107,7 @@ def main():
         pass  # Execution logging removed for final release
         sc.pl.dotplot(adata_sub, var_names=all_targets, groupby='infection_state', show=False, cmap='Reds', standard_scale='var')
         out_dot = OUT_DIR / "Virtual_Coprofiling_Dotplot.tiff"
-        plt.savefig(out_dot, dpi=300, bbox_inches='tight')
+        pub_style.save_pub_fig(plt.gcf(), out_dot, dpi=300, bbox_inches='tight')
         plt.close()
         pass  # Execution logging removed for final release
 

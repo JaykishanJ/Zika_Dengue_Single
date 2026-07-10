@@ -1,5 +1,14 @@
 import scanpy as sc
 import matplotlib.pyplot as plt
+
+import sys
+from pathlib import Path
+if str(Path("E:/Zika_Enrichment/Publication_Pipeline")) not in sys.path:
+    sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
+import pub_style
+pub_style.apply_style()
+FIG_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/final_publication_figures")
+
 import matplotlib.patches as mpatches
 from pathlib import Path
 
@@ -52,7 +61,7 @@ def main():
         
         out_file = OUT_DIR / f"UMAP_{col}.tiff"
         plt.tight_layout()
-        plt.savefig(out_file, dpi=300, bbox_inches='tight', format='tiff')
+        pub_style.save_pub_fig(plt.gcf(), out_file, dpi=300, bbox_inches='tight', format='tiff')
         plt.close()
         pass  # Execution logging removed for final release
 

@@ -7,7 +7,8 @@ from upsetplot import from_contents, plot
 sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
 import pub_style
 
-pub_style.apply_style()
+# We intentionally do NOT apply_style() here because upsetplot 
+# internally manages grid subplots and crashes when custom rcParams (like spines=False) are used.
 
 OUT_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/Step_06_Fig_6_CrossModal_Signature")
 BASE_SC = Path("E:/Zika_antigravity/SC_RNA_Zika_DENV")
@@ -100,10 +101,10 @@ def main():
     data = from_contents(contents)
     
     fig = plt.figure(figsize=(7.08, 5))
-    plot(data, fig=fig, sort_by='cardinality', show_counts=True, element_size=40)
+    plot(data, fig=fig, sort_by='cardinality', element_size=40)
     plt.suptitle("Cross-Modal Gene Signature Overlap", fontweight='bold')
     
-    pub_style.save_pub_fig(fig, OUT_DIR / "UpSet_CrossModal.tiff", width_mm=180, height_mm=120)
+    plt.savefig(OUT_DIR / "UpSet_CrossModal.tiff", dpi=300, format='tiff', bbox_inches='tight')
     plt.close()
 
 if __name__ == "__main__":

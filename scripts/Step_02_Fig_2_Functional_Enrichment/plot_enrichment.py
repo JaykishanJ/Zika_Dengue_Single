@@ -2,6 +2,15 @@ import pandas as pd
 import gseapy as gp
 import matplotlib.pyplot as plt
 
+import sys
+from pathlib import Path
+if str(Path("E:/Zika_Enrichment/Publication_Pipeline")) not in sys.path:
+    sys.path.append(str(Path("E:/Zika_Enrichment/Publication_Pipeline")))
+import pub_style
+pub_style.apply_style()
+FIG_DIR = Path("E:/Zika_Enrichment/Publication_Pipeline/final_publication_figures")
+
+
 # Nature SR Aesthetics
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = ['Arial', 'Helvetica', 'DejaVu Sans']
@@ -156,7 +165,7 @@ for db_name in databases.keys():
     
     # Adjust layout to accommodate colorbar on the right
     plt.tight_layout()
-    plt.savefig(OUT_DIR / f"Comparative_Heatmap_{db_name}.tiff", dpi=300, format='tiff', bbox_inches='tight')
+    pub_style.save_pub_fig(plt.gcf(), OUT_DIR / f"Comparative_Heatmap_{db_name}.tiff", dpi=300, format='tiff', bbox_inches='tight')
     plt.close()
     pass  # Execution logging removed for final release
 
