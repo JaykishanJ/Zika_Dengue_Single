@@ -116,7 +116,16 @@ def filter_cells(adata: sc.AnnData, min_genes: int, max_genes: int, max_mito: fl
     adata_filtered = adata[mask.to_numpy()].copy()
     adata_filtered.layers["counts"] = adata_filtered.X.copy()
     
-    return adata_filtered
+    logger.info("Running Scrublet for doublet detection...")
+    sc.external.pp.scrublet(adata_filtered)
+    
+    doublet_mask = adata_filtered.obs['predicted_doublet'] == True
+    n_doublets = doublet_mask.sum()
+    logger.info(f"Scrublet identified {n_doublets} doublets.")
+    
+    adata_final = adata_filtered[~doublet_mask].copy()
+    
+    return adata_final
 
 def main():
     """Main execution entry point."""

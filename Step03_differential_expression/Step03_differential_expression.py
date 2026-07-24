@@ -29,8 +29,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scanpy as sc
-from pydeseq2.dds import DeseqDataSet
-from pydeseq2.ds import DeseqStats
 
 warnings.filterwarnings("ignore")
 
@@ -54,8 +52,6 @@ def parse_args() -> argparse.Namespace:
                         help="False Discovery Rate (padj) threshold.")
     parser.add_argument("--lfc", type=float, default=0.58,
                         help="Log2 Fold Change threshold.")
-    parser.add_argument("--min-cells", type=int, default=5,
-                        help="Minimum number of cells required per pseudobulk sample.")
     
     # Logging
     parser.add_argument("--log-level", type=str, default="INFO",
@@ -75,9 +71,9 @@ def setup_logger(level: str) -> logging.Logger:
         logger.addHandler(ch)
     return logger
 
-def run_deseq2_pseudobulk(adata: sc.AnnData, virus: str, min_cells: int, logger: logging.Logger) -> pd.DataFrame:
-    """Prepare pseudobulk counts and run DESeq2 for a given virus."""
-    logger.info(f"Preparing pseudobulk data for {virus}...")
+def run_wilcoxon_sc(adata: sc.AnnData, virus: str, logger: logging.Logger) -> pd.DataFrame:
+    """Run single-cell Wilcoxon rank-sum test for a given virus."""
+    logger.info(f"Preparing single-cell data for {virus}...")
     
     # Pre-defined mapping of virus to its corresponding Mock experiment batch
     virus_experiment = {"DENV": "10017006", "ZIKV": "10017008"}
@@ -92,53 +88,27 @@ def run_deseq2_pseudobulk(adata: sc.AnnData, virus: str, min_cells: int, logger:
     
     sub = adata[(is_high | is_mock).to_numpy()].copy()
     sub.obs["grp"] = np.where(sub.obs["infection_state"] == "Mock", "Mock", "High")
+    sub.obs["grp"] = pd.Categorical(sub.obs["grp"], categories=["Mock", "High"])
     
-    rows: List[np.ndarray] = []
-    meta: List[Dict[str, Any]] = []
+    if len(sub) == 0 or len(sub[sub.obs["grp"] == "High"]) == 0 or len(sub[sub.obs["grp"] == "Mock"]) == 0:
+        raise ValueError(f"Not enough cells for {virus} DE analysis.")
+
+    logger.info(f"Running Wilcoxon rank-sum test on {len(sub)} cells for {virus}...")
     
-    for (t, g), n in sub.obs.groupby(["time_h", "grp"], observed=True).size().items():
-        if n < min_cells:
-            continue
-        m = ((sub.obs.time_h == t) & (sub.obs.grp == g)).to_numpy()
-        rows.append(np.asarray(sub.layers["counts"][m].sum(0)).ravel())
-        meta.append({
-            "sample": f"{g}_{t}h", 
-            "time_h": str(t), 
-            "grp": g, 
-            "n_cells": int(n)
-        })
-        
-    if not rows:
-        raise ValueError(f"No valid pseudobulk samples constructed for {virus}.")
-        
-    info = pd.DataFrame(meta).set_index("sample")
-    cnt = pd.DataFrame(np.vstack(rows), columns=adata.var_names, index=info.index)
+    # Run rank_genes_groups
+    sc.tl.rank_genes_groups(sub, groupby="grp", groups=["High"], reference="Mock", method="wilcoxon", use_raw=False)
     
-    # Require paired timepoints
-    paired = [t for t in info.time_h.unique() if info[info.time_h == t].grp.nunique() == 2]
-    info = info[info.time_h.isin(paired)]
-    cnt = cnt.loc[info.index]
+    # Extract results
+    res_df = sc.get.rank_genes_groups_df(sub, group="High")
     
-    if info.empty:
-        raise ValueError(f"No paired timepoints left for {virus} after filtering.")
-        
-    # Filter genes
-    logger.info(f"Running DESeq2 on {len(info)} samples for {virus}...")
-    keep = (cnt.sum(0) >= 10) & ((cnt > 0).sum(0) >= 2)
-    cnt = cnt.loc[:, keep].round().astype(int)
-    info["grp"] = pd.Categorical(info.grp, categories=["Mock", "High"])
+    # Format to match previous output
+    res_df = res_df.rename(columns={"names": "feature", "logfoldchanges": "log2FoldChange", "pvals_adj": "padj", "pvals": "pvalue"})
+    res_df = res_df.set_index("feature")
     
-    dds = DeseqDataSet(counts=cnt, metadata=info, design="~time_h + grp", quiet=True)
-    dds.deseq2()
-    
-    st = DeseqStats(dds, contrast=["grp", "High", "Mock"], quiet=True)
-    st.summary()
-    
-    res = st.results_df.copy()
     symbols = adata.var["symbol"].astype(str)
-    res["symbol"] = symbols.reindex(res.index).values
+    res_df["symbol"] = symbols.reindex(res_df.index).values
     
-    return res.sort_values("padj")
+    return res_df.sort_values("padj")
 
 def plot_volcano(res: pd.DataFrame, virus: str, fdr: float, lfc: float, out_path: Path, logger: logging.Logger) -> None:
     """Generate and save a volcano plot for the DE results."""
@@ -191,7 +161,7 @@ def main():
 
     for virus in ["DENV", "ZIKV"]:
         try:
-            res = run_deseq2_pseudobulk(adata, virus, args.min_cells, logger)
+            res = run_wilcoxon_sc(adata, virus, logger)
             
             csv_path = args.out_dir / f"DE_High_vs_Mock_{virus}.csv"
             res.to_csv(csv_path)

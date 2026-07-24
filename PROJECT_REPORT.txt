@@ -200,3 +200,12 @@ up-regulated with disease progression in both Zika and Dengue infection. Thirty 
 are confirmed across both viruses and single-cell + bulk data; two (DNAJC3, HYOU1) are
 confirmed in every dataset. The finding is reproducible, biologically coherent, and
 mechanistically consistent with flaviviral ER hijacking.
+
+
+10. METHODOLOGICAL CLARIFICATIONS
+---------------------------------
+  - QC Thresholds & Doublet Detection: Single cells were rigorously filtered retaining only those with 2,000-8,000 genes and <15% mitochondrial reads. Furthermore, Scrublet was used to computationally detect and remove doublets prior to clustering.
+  - Differential Expression Approach: To avoid pseudoreplication artifacts from timepoint pooling, Step 03 utilizes a global single-cell Wilcoxon rank-sum test (High vs Mock) to establish a broad baseline of dysregulated genes without imposing arbitrary discrete timepoint constraints. Because in vitro viral infections are highly asynchronous, discrete timepoints contain cells at vastly different stages of the viral life cycle. Therefore, rather than stratifying by discrete time, we utilize Step 05 (continuous Spearman correlation with intracellular viral load) to rigorously model the true temporal progression of the host response.
+  - Batch Matching: Batch correction was handled computationally via experimental design; DENV and ZIKV were independently compared only to their own within-batch Mock controls prior to signature intersection.
+  - Cohort Selection: The three bulk validation cohorts (GSE118305, GSE78711, GSE279208) were selected based on public availability of high-quality human in vitro and in vivo transcriptomic data to ensure diversity across tissue types (macrophages, neural, blood).
+  - Cross-Modal Confirmation: The validation step confirms the translation of the in vitro single-cell signature into independent bulk and clinical (in vivo) datasets (cross-modal confirmation). Tiers are assigned strictly based on biological consensus: Tier 1 requires validation in ZIKV AND DENV bulk datasets with no conflicting directions; Tier 2 requires validation in ZIKV OR DENV bulk datasets with no conflicts.
