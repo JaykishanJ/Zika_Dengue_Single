@@ -26,16 +26,30 @@ By integrating **single-cell RNA sequencing (scRNA-seq)** of Huh7 hepatoma cells
 
 ---
 
-## 📊 Key Visualizations
+## 📊 Key Visualizations & Biological Insights
+
+A core tenet of this pipeline is producing high-quality, publication-ready figures that tell a clear biological story.
 
 <div align="center">
 
-### Biological Cell State Map
-*Single-cell transcriptomic landscape of Huh7 cells annotated by biological state.*
-<img src="Step09_marker_analysis/UMAP_cell_state.png" width="800" alt="Cell State UMAP">
+### 1. The Single-Cell Viral Landscape
+*Single-cell transcriptomic landscape of Huh7 cells mapping viral load and infection states.*
+<img src="Step08_figures/publication/Figure1_scRNA_landscape.png" width="800" alt="scRNA Landscape">
 
-### Validating Cell-Specific Responses (Tier 4)
-*Canonical markers defining the viral stress states (e.g., DDIT3/CHOP for ER Stress) vs standard cell cycle and metabolic states.*
+### 2. Massive Transcriptional Reprogramming
+*Volcano plots showing the sheer scale of host response to High ZIKV and DENV infection.*
+<img src="Step08_figures/publication/Figure2_scRNA_volcanoes.png" width="800" alt="Volcano Plots">
+
+### 3. The 245-Gene Convergent Core
+*A heat map revealing the identical set of genes hijacked by both viruses.*
+<img src="Step08_figures/publication/Figure3_convergent_core_heatmap.png" width="800" alt="Core Heatmap">
+
+### 4. Pathway Enrichment (Biological Mechanism)
+*Gene Set Enrichment Analysis (GSEA) proving both viruses trigger Unfolded Protein Response (UPR) and ATF4-mediated amino acid starvation.*
+<img src="Step08_figures/publication/Figure6_pathway_enrichment.png" width="800" alt="Pathway Enrichment">
+
+### 5. Cell-Type Specific Responses (Huh7)
+*Canonical markers defining the distinct biological states of the Huh7 hepatoma cells.*
 <img src="Step09_marker_analysis/MatrixPlot_Cell_States.png" width="800" alt="Matrix Plot">
 
 </div>
