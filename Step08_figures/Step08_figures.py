@@ -188,21 +188,27 @@ def generate_figure_3(s4_dir: Path, pub_dir: Path, dpi: int, logger: logging.Log
     c = pd.read_csv(path)
     hm = c[c["concordant"] == True].set_index("symbol")[["DENV_log2FC", "ZIKV_log2FC"]].sort_values("DENV_log2FC")
     
-    fig, a = plt.subplots(figsize=(3.4, 6))
+    # Calculate dynamic height: 0.15 inches per gene, min 6 inches
+    height = max(6.0, len(hm) * 0.15)
+    
+    fig, a = plt.subplots(figsize=(4, height))
     im = a.imshow(hm.values, cmap="RdBu_r", vmin=-3, vmax=3, aspect="auto")
     
     a.set_xticks([0, 1])
-    a.set_xticklabels(["DENV", "ZIKV"])
+    a.set_xticklabels(["DENV", "ZIKV"], fontsize=12)
     
-    if len(hm) <= 50:
-        a.set_yticks(range(len(hm)))
-        a.set_yticklabels(hm.index, fontsize=8)
-    else:
-        a.set_yticks([]) # Hide overlapping labels if too many genes
+    a.set_yticks(range(len(hm)))
+    a.set_yticklabels(hm.index, fontsize=8)
         
-    a.set_title("Convergent core")
+    a.set_title("Convergent core", fontsize=14, pad=10, fontweight="bold")
     
-    plt.colorbar(im, ax=a, label="log2FC", shrink=0.5)
+    # Adjust colorbar to be nicely proportioned
+    from mpl_toolkits.axes_grid1 import make_axes_locatable
+    divider = make_axes_locatable(a)
+    cax = divider.append_axes("right", size="8%", pad=0.1)
+    cbar = plt.colorbar(im, cax=cax)
+    cbar.set_label("log2FC", size=10)
+    
     fig.tight_layout()
     save_fig(fig, pub_dir, "Figure3_convergent_core_heatmap", dpi, logger)
 
