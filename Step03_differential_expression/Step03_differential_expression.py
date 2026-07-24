@@ -34,7 +34,7 @@ warnings.filterwarnings("ignore")
 
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(description="Run pseudobulk differential expression analysis.")
+    parser = argparse.ArgumentParser(description="Run single-cell Wilcoxon differential expression analysis.")
     
     # Default paths
     default_here = Path(__file__).resolve().parent
@@ -101,7 +101,7 @@ def run_wilcoxon_sc(adata: sc.AnnData, virus: str, logger: logging.Logger) -> pd
     # Extract results
     res_df = sc.get.rank_genes_groups_df(sub, group="High")
     
-    # Format to match previous output
+    # Format the results dataframe
     res_df = res_df.rename(columns={"names": "feature", "logfoldchanges": "log2FoldChange", "pvals_adj": "padj", "pvals": "pvalue"})
     res_df = res_df.set_index("feature")
     
