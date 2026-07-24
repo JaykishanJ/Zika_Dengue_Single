@@ -46,6 +46,7 @@ Each script uses paths **relative to its own location**, so the folder is portab
 | 06 | crossmodal_validation | 30 common genes (Tier 1), reading Step 05b's bulk DE |
 | 07 | enrichment | pathway enrichment (up/down) + barplot |
 | 08 | figures | publication/ + supplementary/ (600 dpi PNG) |
+| 09 | marker_analysis | `leiden_cluster_markers.csv`, cell state UMAP, Matrix Plot, and Tier 4 cell-specific visualization |
 
 ## Reproducibility check (this run vs the original ForProfessor package)
 Every step reproduced the original **exactly**:
