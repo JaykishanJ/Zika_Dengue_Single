@@ -193,8 +193,13 @@ def generate_figure_3(s4_dir: Path, pub_dir: Path, dpi: int, logger: logging.Log
     
     a.set_xticks([0, 1])
     a.set_xticklabels(["DENV", "ZIKV"])
-    a.set_yticks(range(len(hm)))
-    a.set_yticklabels(hm.index, fontsize=8)
+    
+    if len(hm) <= 50:
+        a.set_yticks(range(len(hm)))
+        a.set_yticklabels(hm.index, fontsize=8)
+    else:
+        a.set_yticks([]) # Hide overlapping labels if too many genes
+        
     a.set_title("Convergent core")
     
     plt.colorbar(im, ax=a, label="log2FC", shrink=0.5)
