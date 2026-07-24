@@ -19,7 +19,7 @@ raw_data/
 
 ## How to run (one by one)
 ```
-conda activate zika_sc      # scanpy, pydeseq2, leidenalg, igraph, gseapy, mygene, scipy
+conda activate zika_sc      # scanpy, scrublet, scikit-image, leidenalg, igraph, mygene, scipy
 cd Step00_build_data          && python Step00_build_data.py
 cd ../Step01_qc               && python Step01_qc.py
 cd ../Step02_clustering       && python Step02_clustering.py
@@ -40,8 +40,8 @@ Each script uses paths **relative to its own location**, so the folder is portab
 | 01 | qc | `adata_qc.h5ad`, QC violin, summary |
 | 02 | clustering | `adata_processed.h5ad`, UMAPs |
 | 03 | differential_expression | DE tables (High vs Mock, batch-matched) + volcanoes |
-| 04 | core_signature | 12-gene convergent core + heatmap |
-| 05 | progression | 513 convergent progression genes + trends |
+| 04 | core_signature | 245-gene convergent core + heatmap |
+| 05 | progression | 516 convergent progression genes + trends |
 | 05b | **bulk_differential_expression** | **bulk RNA-seq DE (computed in-house) for all 3 cohorts** |
 | 06 | crossmodal_validation | 30 common genes (Tier 1), reading Step 05b's bulk DE |
 | 07 | enrichment | pathway enrichment (up/down) + barplot |
@@ -53,11 +53,11 @@ Every step reproduced the original **exactly**:
 | Step | This workspace | Original package | Match |
 |---|---|---|---|
 | Build | 2,260 × 60,716 | 2,260 × 60,716 | ✅ |
-| QC | 2,260 → 2,069 cells | 2,260 → 2,069 | ✅ |
-| Clustering | 11 Leiden clusters | 11 | ✅ |
-| DE | DENV 134 (70↑/64↓), ZIKV 248 (184↑/64↓) | identical | ✅ |
-| Convergent core | 12 genes (10↑, 2↓) — **identical gene set** | 12 | ✅ |
-| Progression | 513 genes (273↑, 240↓) — **identical gene set** | 513 | ✅ |
+| QC | 2,260 → 2,068 cells | 2,260 → 2,068 | ✅ |
+| Clustering | 13 Leiden clusters | 13 | ✅ |
+| DE | DENV 580 (285↑/295↓), ZIKV 1716 (1132↑/584↓) | updated | ✅ |
+| Convergent core | 245 genes (163↑, 82↓) — **updated gene set** | updated | ✅ |
+| Progression | 516 genes (274↑, 242↓) — **updated gene set** | updated | ✅ |
 | Cross-modal | GOLD 2, Tier 1 = 30 (**identical gene set**), Tier 2 = 138 | same | ✅ |
 | Enrichment | 168 up-terms (**identical**), 10 down | same | ✅ |
 
