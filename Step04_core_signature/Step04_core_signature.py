@@ -20,7 +20,7 @@ import logging
 import sys
 import warnings
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import matplotlib
 matplotlib.use("Agg")

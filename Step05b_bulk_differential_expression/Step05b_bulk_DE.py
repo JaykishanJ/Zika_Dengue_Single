@@ -194,7 +194,7 @@ def process_gse279208(vst_file: Path, pheno_file: Path, out_dir: Path, fdr: floa
         lfc = A.mean(1) - B.mean(1)
         _, p = ttest_ind(A, B, axis=1, equal_var=False)
         
-        den = pd.DataFrame({"entrez": vst.index.astype(str), "lfc": lfc, "padj": benjamini_hochberg(p)})
+        den = pd.DataFrame({"entrez": vst.index.astype(str), "lfc": lfc, "padj": benjamini_hochberg(np.nan_to_num(p, nan=1.0))})
         
         logger.info("Querying MyGene for symbol mapping (requires internet)...")
         mg = mygene.MyGeneInfo()

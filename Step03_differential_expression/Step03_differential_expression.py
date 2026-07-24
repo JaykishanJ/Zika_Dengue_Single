@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-STEP 03 - Differential expression (pseudobulk DESeq2, batch-matched High vs Mock).
+STEP 03 - Differential expression (single-cell Wilcoxon, batch-matched High vs Mock).
 
-This script performs differential expression analysis using a pseudobulk approach
-with DESeq2. It compares 'High' infection state cells against matched 'Mock' controls
+This script performs differential expression analysis using a single-cell approach
+with Wilcoxon rank-sum test. It compares 'High' infection state cells against matched 'Mock' controls
 for both DENV and ZIKV, producing DE statistics and volcano plots.
 
 Inputs:
@@ -159,6 +159,7 @@ def main():
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
+    errors = False
     for virus in ["DENV", "ZIKV"]:
         try:
             res = run_wilcoxon_sc(adata, virus, logger)
@@ -179,8 +180,12 @@ def main():
             
         except Exception as e:
             logger.error(f"Failed processing virus {virus}: {e}")
+            errors = True
             continue
 
+    if errors:
+        logger.error("Step 03 completed with errors.")
+        sys.exit(1)
     logger.info("Step 03 completed successfully.")
 
 if __name__ == "__main__":

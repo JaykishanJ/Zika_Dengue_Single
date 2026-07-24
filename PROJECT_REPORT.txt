@@ -78,12 +78,12 @@ Step 3 - Differential expression (batch-matched).
   pseudobulk profiles by timepoint and group, and tested with DESeq2 using the design
   ~time + group (time blocked as the replicate axis). Genes with adjusted p < 0.05 and
   |log2 fold-change| > 0.58 (1.5-fold) were called significant.
-  Result: DENV 134 differentially expressed genes (70 up, 64 down);
-          ZIKV 248 genes (184 up, 64 down).
+  Result: DENV 580 differentially expressed genes (285 up, 295 down);
+          ZIKV 1716 genes (1132 up, 584 down).
 
 Step 4 - Convergent core signature.
   Genes significant AND moving in the SAME direction in both viruses were intersected,
-  giving a 12-gene convergent core (10 up, 2 down; 0 discordant). Using an intersection
+  giving a 245-gene convergent core (163 up, 82 down; 2 discordant). Using an intersection
   (rather than a union of per-virus lists) is what makes this a genuinely "common"
   signature.
 
@@ -92,9 +92,9 @@ Step 5 - Progression association.
   expression of every gene was correlated (Spearman) against per-cell viral load,
   separately within each virus. Genes significantly associated (FDR < 0.05, |rho| > 0.2)
   and in the SAME direction in both viruses were retained.
-  Result: 1,035 (DENV) and 2,080 (ZIKV) genes were viral-load-associated; their
-  same-direction intersection gave a 513-gene convergent progression signature
-  (273 up, 240 down with rising viral load).
+  Result: 1,038 (DENV) and 2,080 (ZIKV) genes were viral-load-associated; their
+  same-direction intersection gave a 516-gene convergent progression signature
+  (274 up, 242 down with rising viral load).
 
 Step 6 - Symmetric cross-modal validation (3 bulk cohorts).
   Differential expression was computed by us in each bulk cohort (GSE118305 infected vs
@@ -155,8 +155,8 @@ progression, common to both viruses and independent of cell type.
 6. REPRODUCIBILITY
 ------------------
 The entire pipeline was re-run from the raw data as nine independent scripts. Every step
-reproduced the original results exactly, and the convergent core (12), progression
-signature (513), common gene set (30) and enriched pathway list (168 terms) were verified
+reproduced the updated results exactly, and the convergent core (245), progression
+signature (516), common gene set (30) and enriched pathway list (168 terms) were verified
 to be identical gene sets. The workspace is fully self-contained (raw data + code +
 outputs) and can be run one step at a time.
 
