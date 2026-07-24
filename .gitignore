@@ -1,0 +1,11 @@
+# Ignore large data files
+*.zip
+*.gz
+*.h5ad
+
+# Ignore python caches
+__pycache__/
+*.pyc
+
+# Ignore OS files
+.DS_Store

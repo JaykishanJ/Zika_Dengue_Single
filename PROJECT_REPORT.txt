@@ -1,0 +1,202 @@
+A CONVERGENT ER-STRESS / ATF4 HOST PROGRAM MARKS DISEASE PROGRESSION
+IN ZIKA AND DENGUE VIRUS INFECTION
+========================================================================
+
+1. BACKGROUND AND RATIONALE
+---------------------------
+Zika virus (ZIKV) and Dengue virus (DENV) are closely related mosquito-borne
+flaviviruses that share extensive genomic and structural homology and overlapping
+clinical features. A central question is whether, despite infecting different tissues,
+the two viruses drive a shared (convergent) host transcriptional response as infection
+progresses. Identifying such a common program would point to conserved host processes
+that could serve as pan-flaviviral therapeutic or biomarker targets.
+
+We used a virus-inclusive single-cell RNA-seq dataset in which every cell carries a
+measured intracellular viral load, allowing "disease progression" to be defined directly
+at the single-cell level (rising viral burden), rather than inferred. We then asked
+whether the genes that track progression in BOTH viruses are reproduced in independent
+bulk RNA-seq datasets.
+
+2. OBJECTIVE
+------------
+Main aim: To identify and validate the convergent host transcriptional program that is
+commonly regulated in both ZIKV and DENV infection and that tracks disease progression.
+
+Specific objectives:
+  (1) Define, at single-cell resolution, the genes commonly regulated in both viruses.
+  (2) Identify which of these track disease progression (per-cell viral load).
+  (3) Validate the signature across independent bulk RNA-seq cohorts using a rigorous,
+      symmetric rule.
+  (4) Characterise the biology (pathway enrichment) of the resulting signature.
+  (5) (Planned, later) Map upstream regulators (transcription factors and miRNAs) and
+      assess translational value (biomarker / drug repurposing).
+
+3. DATASETS
+-----------
+Single-cell (discovery):
+  - GSE110496 - virus-inclusive scRNA-seq (Zanini et al.), human Huh7 hepatoma cells
+    infected with ZIKV or DENV; 2,260 cells; 4 timepoints (4, 12, 24, 48 h);
+    per-cell viral load recorded. DENV cells belong to experiment 10017006 and ZIKV
+    cells to experiment 10017008 (two independent batches, each with its own mock).
+
+Bulk RNA-seq (independent validation):
+  - GSE118305 - ZIKV-infected human monocyte-derived macrophages (infected vs mock).
+  - GSE78711  - ZIKV-infected human neural progenitor cells (hNPC) (ZIKV vs mock).
+  - GSE279208 - dengue patient whole blood vs healthy controls.
+  (None of the bulk cohorts is Huh7, so bulk validation is deliberately cross-tissue -
+  a stringent test of universality.)
+
+4. METHODS (STEP BY STEP)
+-------------------------
+The analysis was implemented as nine sequential, self-contained steps
+(Step00-Step08); each is reproducible from the raw data.
+
+Step 0 - Build the dataset.
+  The 2,260 per-cell count files and the SOFT metadata were parsed to assemble an
+  expression matrix (2,260 cells x 60,716 genes). Each cell was annotated with its
+  virus, timepoint, experiment (batch), and intracellular viral load, and classified by
+  infection state: Mock (uninfected control), Bystander (exposed, 0 viral molecules),
+  Low (1-10 molecules), or High (>10 molecules). Ensembl IDs were mapped to gene symbols
+  and mitochondrial genes flagged.
+
+Step 1 - Quality control.
+  Spike-ins were removed and cells filtered to 2,000-8,000 detected genes and <15%
+  mitochondrial reads. This retained 2,069 of 2,260 cells (699 Mock, 924 DENV, 446 ZIKV).
+
+Step 2 - Normalisation and clustering.
+  Counts were normalised to 10,000 per cell and log-transformed; the top 3,000 highly
+  variable genes were selected; mitochondrial fraction was regressed out; data were
+  scaled and reduced by PCA (50 components), followed by UMAP embedding and Leiden
+  clustering (resolution 1.0), yielding 11 clusters. Raw counts were retained for
+  differential expression.
+
+Step 3 - Differential expression (batch-matched).
+  For each virus, highly-infected (High) cells were compared with Mock cells FROM THE
+  SAME EXPERIMENT only (DENV vs its own mock in experiment 10017006; ZIKV vs its own
+  mock in 10017008). This batch-matching prevents the difference between the two
+  experiments from leaking into the infection signal. Cells were aggregated into
+  pseudobulk profiles by timepoint and group, and tested with DESeq2 using the design
+  ~time + group (time blocked as the replicate axis). Genes with adjusted p < 0.05 and
+  |log2 fold-change| > 0.58 (1.5-fold) were called significant.
+  Result: DENV 134 differentially expressed genes (70 up, 64 down);
+          ZIKV 248 genes (184 up, 64 down).
+
+Step 4 - Convergent core signature.
+  Genes significant AND moving in the SAME direction in both viruses were intersected,
+  giving a 12-gene convergent core (10 up, 2 down; 0 discordant). Using an intersection
+  (rather than a union of per-virus lists) is what makes this a genuinely "common"
+  signature.
+
+Step 5 - Progression association.
+  To move from "changed by infection" to "changes WITH progression", the log-normalised
+  expression of every gene was correlated (Spearman) against per-cell viral load,
+  separately within each virus. Genes significantly associated (FDR < 0.05, |rho| > 0.2)
+  and in the SAME direction in both viruses were retained.
+  Result: 1,035 (DENV) and 2,080 (ZIKV) genes were viral-load-associated; their
+  same-direction intersection gave a 513-gene convergent progression signature
+  (273 up, 240 down with rising viral load).
+
+Step 6 - Symmetric cross-modal validation (3 bulk cohorts).
+  Differential expression was computed by us in each bulk cohort (GSE118305 infected vs
+  mock; GSE78711 ZIKV vs mock; GSE279208 dengue vs healthy). The SAME rule was applied on
+  both sides (significant + same direction), and each of the 513 single-cell genes was
+  checked for agreement in the bulk data. Genes were tiered:
+    Tier 1 - confirmed in both viruses' bulk (>=1 ZIKV cohort AND the DENV cohort),
+             no conflict: 30 genes.
+    Tier 2 - confirmed in one virus, no conflict: 138 genes.
+    Tier 3 - a bulk cohort conflicts: 114 genes.
+    Tier 4 - single-cell only: 231 genes.
+    GOLD  - same direction in single-cell AND all three bulk cohorts: 2 genes
+            (DNAJC3, HYOU1).
+  Each gene carries an auditable record of exactly which datasets confirmed it.
+
+Step 7 - Pathway enrichment.
+  The validated set (Tier 1+2, 168 genes: 140 up, 28 down) was tested against MSigDB
+  Hallmark, GO Biological Process, KEGG and Reactome (Enrichr).
+
+Step 8 - Figures.
+  Publication and supplementary figures were generated at 600 dpi.
+
+5. FINDINGS / RESULTS
+---------------------
+A single, coherent biological program emerged. As intracellular viral load rises - in
+BOTH ZIKV and DENV, in single-cell data AND across three independent bulk tissues - cells
+converge on the endoplasmic-reticulum (ER) stress response.
+
+The 30 common progression genes (Tier 1) comprise:
+  - Unfolded Protein Response / ER-associated degradation (up):
+    XBP1, HYOU1, DNAJC3, DERL2, SYVN1, SEC23B, SEC24D, HM13, SSR3, FICD, TMEM39A.
+  - ATF4 integrated-stress-response - amino-acid biosynthesis, transport and metabolism
+    (up): ASNS, PHGDH, PSAT1, SHMT2, MTHFD2, PCK2, CHAC1, SLC7A11, SLC7A1, SLC1A4, NANS,
+    SLC33A1.
+  - Additional up: ADM2, NUCB2, ISG20, MANF, CPEB4.
+  - Down: NME4, PRSS23.
+
+Two genes - DNAJC3 and HYOU1 (both ER chaperones) - agreed in EVERY dataset and virus
+without exception, representing the most robust, universal core.
+
+Pathway enrichment was highly significant and internally consistent for the up-regulated
+program:
+  - Protein processing in the endoplasmic reticulum (adjusted p = 3 x 10^-30)
+  - Unfolded Protein Response (adjusted p = 2 x 10^-24)
+  - mTORC1 signalling (adjusted p = 5 x 10^-19)
+  - IRE1-mediated UPR and "XBP1 activates chaperone genes"
+  - ER-associated degradation (ERAD) and cytosolic tRNA aminoacylation.
+The down-regulated set (28 genes) showed no strong coherent pathway, so the up-regulated
+ER-stress/ATF4 program is the substantive finding.
+
+Biological interpretation: flaviviruses replicate on ER membranes and flood the ER with
+viral protein, triggering ER stress; the IRE1/XBP1 unfolded-protein response and the
+ATF4-driven amino-acid/one-carbon stress response are activated to cope, and, when
+sustained, drive the cell toward death (e.g. CHOP, CHAC1). This makes the signature a
+mechanistically plausible marker - and candidate mediator - of flaviviral disease
+progression, common to both viruses and independent of cell type.
+
+6. REPRODUCIBILITY
+------------------
+The entire pipeline was re-run from the raw data as nine independent scripts. Every step
+reproduced the original results exactly, and the convergent core (12), progression
+signature (513), common gene set (30) and enriched pathway list (168 terms) were verified
+to be identical gene sets. The workspace is fully self-contained (raw data + code +
+outputs) and can be run one step at a time.
+
+7. LIMITATIONS (STATED HONESTLY)
+--------------------------------
+  - The analysis demonstrates ASSOCIATION (genes track viral burden), not proven
+    causation; establishing that these genes DRIVE progression would require perturbation
+    experiments (knockdown/overexpression).
+  - No Huh7 bulk RNA-seq dataset exists, so bulk validation is cross-tissue (hepatoma
+    single-cell versus macrophage, neural and blood bulk). This is a strength for
+    universality but is not tissue-matched.
+  - The macrophage cohort (GSE118305) is reported to broadly suppress host transcription
+    during ZIKV infection, making it a harsh validator; consequently the 30-gene Tier 1
+    set (confirmed in both viruses) is reported as the headline, and the two all-dataset
+    genes (DNAJC3, HYOU1) as the ultra-conservative core.
+
+8. METHODOLOGICAL RIGOUR (KEY CHOICES)
+--------------------------------------
+  - "Common" genes were defined by INTERSECTION of same-direction differentially
+    expressed genes, not by pooling per-virus top gene lists.
+  - Differential expression was BATCH-MATCHED (each virus versus its own experiment's
+    controls).
+  - Progression was measured directly against per-cell viral load.
+  - Bulk validation applied the SAME significance-and-direction rule to single-cell and
+    bulk (a symmetric criterion), and all bulk differential expression was computed
+    in-house from the raw data.
+
+9. NEXT STEPS (PLANNED)
+-----------------------
+  - Regulatory layer: transcription-factor enrichment (expected ATF4, XBP1, ATF6) and a
+    miRNA-target network built on the validated convergent genes.
+  - Translational: a progression biomarker model and drug-repurposing screen against the
+    core signature.
+
+SUMMARY
+-------
+Using per-cell viral load as a direct measure of progression and a rigorous, symmetric
+cross-modal validation across three independent bulk cohorts, we identify a convergent
+ER-stress / Unfolded Protein Response + ATF4 amino-acid-stress program that is commonly
+up-regulated with disease progression in both Zika and Dengue infection. Thirty genes
+are confirmed across both viruses and single-cell + bulk data; two (DNAJC3, HYOU1) are
+confirmed in every dataset. The finding is reproducible, biologically coherent, and
+mechanistically consistent with flaviviral ER hijacking.

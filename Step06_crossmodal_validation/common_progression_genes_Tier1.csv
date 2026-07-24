@@ -1,0 +1,31 @@
+symbol,sc_direction,rho_DENV_sc,rho_ZIKV_sc,ZIKV_macrophage,ZIKV_neural,DENV_blood,n_bulk_confirm,all3_agree,conflict,tier,in_DE_core,n_datasets_confirm,confirmed_in,conflicts_in
+DNAJC3,up,0.51,0.305,up,up,up,3,True,False,1,False,5,scRNA-DENV; scRNA-ZIKV; ZIKV-macrophage; ZIKV-neural; DENV-blood,none
+HYOU1,up,0.484,0.345,up,up,up,3,True,False,1,False,5,scRNA-DENV; scRNA-ZIKV; ZIKV-macrophage; ZIKV-neural; DENV-blood,none
+NME4,down,-0.303,-0.309,ns,down,down,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+PRSS23,down,-0.217,-0.259,ns,down,down,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+ADM2,up,0.302,0.355,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+ASNS,up,0.519,0.58,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+CHAC1,up,0.478,0.393,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+CPEB4,up,0.2,0.206,up,ns,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-macrophage; DENV-blood,none
+DERL2,up,0.505,0.289,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+FICD,up,0.346,0.261,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+HM13,up,0.352,0.485,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+ISG20,up,0.436,0.402,up,ns,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-macrophage; DENV-blood,none
+MANF,up,0.466,0.202,up,ns,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-macrophage; DENV-blood,none
+MTHFD2,up,0.504,0.563,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+NANS,up,0.445,0.379,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+NUCB2,up,0.617,0.469,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+PCK2,up,0.24,0.563,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+PHGDH,up,0.251,0.558,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+PSAT1,up,0.363,0.566,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+SEC23B,up,0.377,0.576,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+SEC24D,up,0.337,0.364,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+SHMT2,up,0.45,0.605,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+SLC1A4,up,0.269,0.363,ns,up,up,2,False,False,1,True,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+SLC33A1,up,0.307,0.363,up,ns,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-macrophage; DENV-blood,none
+SLC7A1,up,0.32,0.215,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+SLC7A11,up,0.441,0.406,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+SSR3,up,0.555,0.405,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+SYVN1,up,0.331,0.377,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+TMEM39A,up,0.384,0.603,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
+XBP1,up,0.32,0.433,ns,up,up,2,False,False,1,False,4,scRNA-DENV; scRNA-ZIKV; ZIKV-neural; DENV-blood,none
