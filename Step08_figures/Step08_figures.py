@@ -385,7 +385,7 @@ def generate_figure_8(s5_dir: Path, s5b_dir: Path, s6_dir: Path, pub_dir: Path, 
         
         fig, a = plt.subplots(figsize=(9, 8))
         v = venn3([sc_set, zikv_bulk, denv_bulk],
-                  set_labels=("Single-cell\nconvergent progression\n(513)", "ZIKV bulk DEGs\n(macrophage + neural)", "DENV bulk DEGs\n(blood)"), ax=a)
+                  set_labels=(f"Single-cell\nconvergent progression\n({len(sc_set)})", "ZIKV bulk DEGs\n(macrophage + neural)", "DENV bulk DEGs\n(blood)"), ax=a)
                   
         for t in (v.set_labels or []):
             if t:
