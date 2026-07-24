@@ -188,19 +188,20 @@ def generate_figure_3(s4_dir: Path, pub_dir: Path, dpi: int, logger: logging.Log
     c = pd.read_csv(path)
     hm = c[c["concordant"] == True].set_index("symbol")[["DENV_log2FC", "ZIKV_log2FC"]].sort_values("DENV_log2FC")
     
-    # Calculate dynamic height: 0.15 inches per gene, min 6 inches
-    height = max(6.0, len(hm) * 0.15)
+    # Restrict to top 25 up and top 25 down genes for publication readability
+    if len(hm) > 50:
+        hm = pd.concat([hm.head(25), hm.tail(25)])
     
-    fig, a = plt.subplots(figsize=(4, height))
+    fig, a = plt.subplots(figsize=(4, 8))
     im = a.imshow(hm.values, cmap="RdBu_r", vmin=-3, vmax=3, aspect="auto")
     
     a.set_xticks([0, 1])
     a.set_xticklabels(["DENV", "ZIKV"], fontsize=12)
     
     a.set_yticks(range(len(hm)))
-    a.set_yticklabels(hm.index, fontsize=8)
+    a.set_yticklabels(hm.index, fontsize=9)
         
-    a.set_title("Convergent core", fontsize=14, pad=10, fontweight="bold")
+    a.set_title("Convergent core (Top 50)", fontsize=14, pad=10, fontweight="bold")
     
     # Adjust colorbar to be nicely proportioned
     from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -268,17 +269,30 @@ def generate_figure_5(s6_dir: Path, pub_dir: Path, dpi: int, logger: logging.Log
         "DENV-blood": t1["DENV_blood"].map(dm)
     }).sort_values(["scRNA-DENV", "ZIKV-neural"])
     
-    fig, a = plt.subplots(figsize=(5.5, 9))
-    im = a.imshow(M.values, cmap="RdBu_r", vmin=-1, vmax=1, aspect="auto")
+    fig, a = plt.subplots(figsize=(6, 8))
     
-    a.set_xticks(range(M.shape[1]))
-    a.set_xticklabels(M.columns, rotation=40, ha="right", fontsize=8)
-    a.set_yticks(range(len(M)))
-    a.set_yticklabels(M.index, fontsize=7)
-    a.set_title("Common progression genes:\ndirection across all datasets")
+    # Publication-ready discrete heatmap using seaborn
+    import seaborn as sns
+    from matplotlib.colors import ListedColormap
     
-    cb = plt.colorbar(im, ax=a, ticks=[-1, 0, 1], shrink=0.4)
-    cb.ax.set_yticklabels(["down", "ns", "up"])
+    # Colormap: Blue (-1), Light Grey (0), Red (1)
+    cmap = ListedColormap(["#2980b9", "#ecf0f1", "#c0392b"])
+    
+    # Missing values (absent) will be white natively if we use mask, but they are NaN. 
+    # Seaborn handles NaN by leaving it transparent/white.
+    sns.heatmap(M, cmap=cmap, vmin=-1, vmax=1, ax=a, 
+                linewidths=0.5, linecolor='white',
+                cbar_kws={"shrink": 0.5, "ticks": [-0.66, 0, 0.66]})
+                
+    a.set_xticklabels(a.get_xticklabels(), rotation=45, ha="right", fontsize=11)
+    a.set_yticklabels(a.get_yticklabels(), fontsize=10)
+    a.set_ylabel("")
+    a.set_title("Cross-modal Evidence (Tier 1)", fontsize=14, pad=15, fontweight="bold")
+    
+    # Fix colorbar labels
+    cbar = a.collections[0].colorbar
+    cbar.set_ticklabels(["Down", "ns", "Up"])
+    cbar.ax.tick_params(labelsize=11) 
     
     fig.tight_layout()
     save_fig(fig, pub_dir, "Figure5_crossmodal_evidence_heatmap", dpi, logger)
