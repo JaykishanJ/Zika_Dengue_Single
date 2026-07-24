@@ -78,12 +78,12 @@ Step 3 - Differential expression (batch-matched).
   pseudobulk profiles by timepoint and group, and tested with DESeq2 using the design
   ~time + group (time blocked as the replicate axis). Genes with adjusted p < 0.05 and
   |log2 fold-change| > 0.58 (1.5-fold) were called significant.
-  Result: DENV 580 differentially expressed genes (285 up, 295 down);
-          ZIKV 1716 genes (1132 up, 584 down).
+  Result: DENV 790 differentially expressed genes (394 up, 396 down);
+          ZIKV 2040 genes (1301 up, 739 down).
 
 Step 4 - Convergent core signature.
   Genes significant AND moving in the SAME direction in both viruses were intersected,
-  giving a 245-gene convergent core (163 up, 82 down; 2 discordant). Using an intersection
+  giving a 247-gene convergent core (165 up, 82 down; 2 discordant). Using an intersection
   (rather than a union of per-virus lists) is what makes this a genuinely "common"
   signature.
 
@@ -99,13 +99,13 @@ Step 5 - Progression association.
 Step 6 - Symmetric cross-modal validation (3 bulk cohorts).
   Differential expression was computed by us in each bulk cohort (GSE118305 infected vs
   mock; GSE78711 ZIKV vs mock; GSE279208 dengue vs healthy). The SAME rule was applied on
-  both sides (significant + same direction), and each of the 513 single-cell genes was
+  both sides (significant + same direction), and each of the 516 single-cell genes was
   checked for agreement in the bulk data. Genes were tiered:
     Tier 1 - confirmed in both viruses' bulk (>=1 ZIKV cohort AND the DENV cohort),
              no conflict: 30 genes.
     Tier 2 - confirmed in one virus, no conflict: 138 genes.
     Tier 3 - a bulk cohort conflicts: 114 genes.
-    Tier 4 - single-cell only: 231 genes.
+    Tier 4 - single-cell only: 234 genes.
     GOLD  - same direction in single-cell AND all three bulk cohorts: 2 genes
             (DNAJC3, HYOU1).
   Each gene carries an auditable record of exactly which datasets confirmed it.

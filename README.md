@@ -19,7 +19,7 @@ This repository contains a comprehensive bioinformatics pipeline designed to unc
 By integrating **single-cell RNA sequencing (scRNA-seq)** of Huh7 hepatoma cells with **bulk RNA-seq** validation cohorts (macrophages, neural progenitors, and whole blood), this pipeline successfully deconvolutes the generic viral response from highly cell-type-specific survival mechanisms.
 
 ### 🌟 Key Discoveries
-1. **The Universal "Pan-Flaviviral" Core:** Discovered a 245-gene core response shared between both viruses.
+1. **The Universal "Pan-Flaviviral" Core:** Discovered a 247-gene core response shared between both viruses.
 2. **ER Stress & Amino Acid Starvation:** Identified that both viruses trigger severe Unfolded Protein Response (UPR) and ATF4-mediated amino acid starvation as viral loads peak.
 3. **The "GOLD" Biomarkers:** Validated *DNAJC3* and *HYOU1* as universal progression markers across 4 distinct human tissue models.
 4. **Hepatocyte-Specific Mechanisms:** Uncovered a 234-gene module (including *SELENOK* and *SERP1*) deployed specifically by Huh7 cells to survive extreme viral ER stress.
@@ -40,7 +40,7 @@ A core tenet of this pipeline is producing high-quality, publication-ready figur
 *Volcano plots showing the sheer scale of host response to High ZIKV and DENV infection.*
 <img src="Step08_figures/publication/Figure2_scRNA_volcanoes.png" width="800" alt="Volcano Plots">
 
-### 3. The 245-Gene Convergent Core
+### 3. The 247-Gene Convergent Core
 *A heat map revealing the identical set of genes hijacked by both viruses.*
 <img src="Step08_figures/publication/Figure3_convergent_core_heatmap.png" width="800" alt="Core Heatmap">
 
@@ -82,7 +82,7 @@ graph TD
 | **01** | `qc` | Mitochondrial filtering, gene count QC, and Scrublet doublet detection. |
 | **02** | `clustering` | Log1p normalization, cell cycle regression, PCA, UMAP, and Leiden clustering. |
 | **03** | `differential_expression` | Wilcoxon rank-sum testing to define High-infection vs Mock DEGs. |
-| **04** | `core_signature` | Intersecting ZIKV and DENV to define the 245-gene convergent core. |
+| **04** | `core_signature` | Intersecting ZIKV and DENV to define the 247-gene convergent core. |
 | **05** | `progression` | Spearman correlation modeling to find genes strictly tracking with viral load. |
 | **05b** | `bulk_differential_expression` | Processing 3 independent bulk RNA-seq cohorts for validation. |
 | **06** | `crossmodal_validation` | Tiering system (Tier 1 to 4) validating sc-genes against bulk cohorts. |
