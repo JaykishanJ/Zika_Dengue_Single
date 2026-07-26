@@ -9,3 +9,13 @@ __pycache__/
 
 # Ignore OS files
 .DS_Store
+
+# Ignore generated datasets and massive figures
+data/
+results/
+publication_figures/
+
+# Ignore temporary refactoring scripts
+fix_*.py
+refactor_*.py
+find_paths.py

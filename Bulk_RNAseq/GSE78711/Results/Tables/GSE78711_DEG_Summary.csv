@@ -1,0 +1,2 @@
+"Dataset","Contrast","Total_genes","Pvalue_0.05","FDR_0.05","FDR_0.05_log2FC_1","Up_in_ZIKV","Down_in_ZIKV"
+"GSE78711","ZIKV_vs_Mock",22525,7604,6332,1169,397,772
